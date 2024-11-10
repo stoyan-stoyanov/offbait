@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>OffBait Settings</title>
+    <link rel="stylesheet" href="src/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="ob-container">
+        <header class="ob-header">
+            <div class="ob-logo">
+                <i class="fa-solid fa-cog"></i>
+            </div>
+            <div class="ob-header-content">
+                <h1 class="ob-title">Settings</h1>
+            </div>
+        </header>
+
+        <form id="options-form">
+            <div class="ob-section">
+                <div class="ob-section-header">
+                    <h3 class="ob-section-title"><i class="fa-solid fa-key"></i> API Configuration</h3>
+                </div>
+                
+                <div class="ob-setting-row">
+                    <div>
+                        <div class="ob-setting-label">OpenAI API Key</div>
+                        <div class="ob-setting-description">Enter your API key to enable AI-powered summarization</div>
+                    </div>
+                    <input 
+                        type="password" 
+                        id="apiKey" 
+                        class="ob-input"
+                        placeholder="sk-..." 
+                        pattern="sk-[a-zA-Z0-9]{32,}"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div class="ob-section">
+                <div class="ob-section-header">
+                    <h3 class="ob-section-title"><i class="fa-solid fa-sliders"></i> Preferences</h3>
+                </div>
+
+                <div class="ob-setting-row">
+                    <div>
+                        <div class="ob-setting-label">Automatic Summarization</div>
+                        <div class="ob-setting-description">Generate article summaries instantly when you open a new page</div>
+                    </div>
+                    <label class="ob-toggle-switch">
+                        <input type="checkbox" id="autoSummarize">
+                        <span class="ob-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="ob-actions">
+                <button type="submit" class="ob-button">Save changes</button>
+            </div>
+        </form>
+
+        <div id="message" class="ob-message"></div>
+    </div>
+
+    <script src="src/options.js"></script>
+</body>
+</html>

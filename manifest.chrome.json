@@ -1,0 +1,51 @@
+{
+    "manifest_version": 3,
+    "name": "Page Summarizer",
+    "version": "1.0",
+    "description": "Automatically adds a summary at the top of web pages",
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage"
+    ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
+    "action": {
+        "default_icon": {
+            "16": "icons/hook-16.png",
+            "32": "icons/hook-32.png",
+            "48": "icons/hook-48.png",
+            "96": "icons/hook-96.png"
+        },
+        "default_title": "Summarize Page"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": [
+                "src/utils.js",
+                "src/ui.js",
+                "src/summarizer.js",
+                "src/auto-summarize.js"
+            ],
+            "css": ["src/styles.css"]
+        }
+    ],
+    "icons": {
+        "16": "icons/hook-16.png",
+        "32": "icons/hook-32.png",
+        "48": "icons/hook-48.png",
+        "96": "icons/hook-96.png"
+    },
+    "background": {
+        "service_worker": "src/background.chrome.js"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; default-src 'self'"
+    }
+}
