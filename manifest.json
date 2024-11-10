@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "Page Summarizer",
+    "name": "Offbait",
     "version": "1.0",
-    "description": "Automatically adds a summary at the top of web pages",
+    "description": "Personal BS filter for the internet",
     "permissions": [
         "activeTab",
         "<all_urls>",

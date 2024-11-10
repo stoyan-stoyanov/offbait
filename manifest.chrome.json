@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "Page Summarizer",
+    "name": "Offbait",
     "version": "1.0",
-    "description": "Automatically adds a summary at the top of web pages",
+    "description": "Personal BS filter for the internet",
     "permissions": [
         "activeTab",
         "scripting",
@@ -46,6 +46,10 @@
         "service_worker": "src/background.chrome.js"
     },
     "content_security_policy": {
-        "extension_pages": "script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; default-src 'self'"
-    }
+        "extension_pages": "script-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; default-src 'self' https://cdnjs.cloudflare.com"
+    },
+    "web_accessible_resources": [{
+        "resources": ["src/*"],
+        "matches": ["<all_urls>"]
+    }]
 }

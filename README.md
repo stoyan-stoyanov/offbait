@@ -1,5 +1,7 @@
 # 🪝 Offbait
 
+<img src="img/img.png" alt="Page Summarizer Extension Screenshot" width="100%">
+
 > Tired of scrolling through 15 paragraphs just to find out you can actually microwave that leftover pizza? Yeah, we feel you.
 
 In today's internet, content creators often bury the good stuff under mountains of fluff, ads, and SEO keywords. Why? Because that's how they make money. But your time is worth more than that.
@@ -7,6 +9,41 @@ In today's internet, content creators often bury the good stuff under mountains 
 This extension fights back against clickbait and content bloat. It uses AI to instantly extract what you actually want to know - the key points, the real answer, the important stuff. Whether it's a recipe buried under someone's life story or a product review hidden in affiliate links, we'll get you straight to the point.
 
 Think of it as your personal BS filter for the internet. Not only will you save time, but maybe, just maybe, we'll help push the internet back towards what matters: quality content that respects your time.
+
+## 🏃‍♂️ Quick Start
+
+### Local Installation
+
+#### Chrome
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/page-summarizer.git
+   cd page-summarizer
+   ```
+
+2. Build the extension:
+   ```bash
+   ./build.sh
+   ```
+
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable "Developer mode" in the top right
+5. Click "Load unpacked" and select the `build/chrome` directory
+
+#### Firefox
+1. Clone the repository
+2. Open Firefox and go to `about:debugging`
+3. Click "This Firefox" in the left sidebar
+4. Click "Load Temporary Add-on"
+5. Select `manifest.json` in the project root
+
+### Development
+1. Make sure you have your OpenAI API key ready
+2. Install the extension using the steps above
+3. Open the extension settings and enter your API key
+4. To see your changes:
+   - Chrome: build using `./build.sh` and click the refresh button on the extension card
+   - Firefox: Reload the extension from `about:debugging`
 
 ## ✨ Features
 

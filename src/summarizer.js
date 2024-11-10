@@ -27,11 +27,11 @@ async function callOpenAI(content) {
             messages: [
                 {
                     role: "system",
-                    content: "You are the biggest expert at summarizing content from HTML. Extract a summary, and key takeaways from the provided text. If the title is a catchy question, attempt to answer the question directly and immediately. Focus only on the important informative stuff and be concise and clear. The summary shouldn't be longer than 3 sentences, and there should be max of 3-5 bullet points. Please give me the best info possible. Extract the highlights based on the type of the content. For example, if it's a recipe summarize the ingredients and detailed recipe steps in the key takeaways, if the content is from a product page extract key product information. If you do well I will give you a massive tip of 1000 dollars!"
+                    content: "You are the biggest leading expert at summarizing content from HTML. Extract a summary, and key takeaways from the provided HTML. If the title is a catchy question, make sure to answer the question directly and immediately. Focus only on the important informative stuff and be concise and clear. The summary shouldn't be longer than 3 sentences, and there should be max of 3-5 bullet points. Please give me the best info possible. Also, make sure to extract the highlights depending on the type of the content. For example, if the content is a cooking blog or a recipe please summarize the ingredients and detailed recipe steps in the key takeaways, if the content is from a product page extract key product information. If you do well I will give you a massive tip of $1000 dollars!"
                 },
                 {
                     role: "user",
-                    content: `Please provide a high-quality summary of this content by focusing on relevant key information: ${content}`
+                    content: `Please provide a high-quality expert summary of this content by focusing on relevant key information: ${content}`
                 }
             ],
             response_format: {
