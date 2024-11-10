@@ -1,4 +1,4 @@
-# Page Summarizer Extension 🪝
+# 🪝 Offbait
 
 > Tired of scrolling through 15 paragraphs just to find out you can actually microwave that leftover pizza? Yeah, we feel you.
 
