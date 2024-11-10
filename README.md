@@ -39,6 +39,7 @@ Think of it as your personal BS filter for the internet. Not only will you save 
 
 ### Development
 1. Make sure you have your OpenAI API key ready
+<img src="img/settings.png" alt="Settings Screenshot" width="50%">
 2. Install the extension using the steps above
 3. Open the extension settings and enter your API key
 4. To see your changes:
