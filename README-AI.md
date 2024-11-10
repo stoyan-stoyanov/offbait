@@ -3,6 +3,147 @@
 This documentation was automatically generated.
 
 
+## ./README.md
+
+```
+# Page Summarizer Extension 🪝
+
+> Tired of scrolling through 15 paragraphs just to find out you can actually microwave that leftover pizza? Yeah, we feel you.
+
+In today's internet, content creators often bury the good stuff under mountains of fluff, ads, and SEO keywords. Why? Because that's how they make money. But your time is worth more than that.
+
+This extension fights back against clickbait and content bloat. It uses AI to instantly extract what you actually want to know - the key points, the real answer, the important stuff. Whether it's a recipe buried under someone's life story or a product review hidden in affiliate links, we'll get you straight to the point.
+
+Think of it as your personal BS filter for the internet. Not only will you save time, but maybe, just maybe, we'll help push the internet back towards what matters: quality content that respects your time.
+
+## ✨ Features
+
+- 🤖 AI-powered summarization using OpenAI's GPT models
+- 🚀 Automatic or manual summary generation for web pages
+- 📱 Clean, modern UI with responsive design
+- 📋 One-click sharing functionality
+- 🎯 Extractive key takeaways
+- ⚙️ Configurable settings with API key management
+- 🔄 Loading states and error handling
+- 🎨 Tailored summaries based on content type (articles, recipes, product pages, etc.)
+- 🌐 Support for both Chrome and Firefox browsers
+
+## 🛠️ Technical Implementation
+
+### Core Components
+
+- **Content Script**: Handles page analysis and summary injection
+- **Background Script**: Manages browser action and extension lifecycle
+- **Options Page**: Provides user configuration interface
+- **UI Components**: Creates modern, responsive summary displays
+
+### Key Files
+
+- `summarizer.js`: AI integration and content processing
+- `ui.js`: Summary panel and interface components
+- `auto-summarize.js`: Automatic summarization logic
+- `options.js`: Settings management
+- `utils.js`: Helper functions and utilities
+
+### Browser Support
+
+- Chrome (Manifest V3)
+- Firefox (Manifest V2)
+
+## 🔧 Configuration
+
+### API Setup
+
+1. Open the extension settings
+2. Enter your OpenAI API key
+3. Configure auto-summarization preference
+
+### Permissions Required
+
+- `activeTab`: For accessing current page content
+- `storage`: For saving user preferences
+- `scripting`: For Chrome manifest V3 support
+- `host_permissions`: For running on web pages
+
+## 💡 How It Works
+
+1. **Content Detection**
+   - Analyzes current page to determine if it's suitable for summarization
+   - Excludes homepages and non-article pages
+
+2. **Summary Generation**
+   - Cleanses HTML content
+   - Sends processed text to OpenAI API
+   - Generates concise summary and key takeaways
+   - Adapts output based on content type
+
+3. **Display**
+   - Shows loading indicator during generation
+   - Presents summary in a clean, floating panel
+   - Provides sharing and closing options
+
+## 🔄 Build Process
+
+```bash
+# Clean and prepare build directories
+./build.sh
+```
+
+This will:
+1. Create separate builds for Chrome and Firefox
+2. Copy appropriate manifest versions
+3. Bundle necessary resources
+4. Generate distribution ZIP files
+
+## 🎨 UI Features
+
+- Modern, system-font based typography
+- Responsive layout with mobile support
+- Animated loading states
+- Success/error notifications
+- Share button with copy confirmation
+- Settings panel with toggle switches
+- Clean, consistent styling
+
+## 🔐 Security
+
+- Secure API key storage
+- Content Security Policy implementation
+- Safe HTML content processing
+- Error handling and validation
+
+## 📦 Distribution
+
+The extension can be packaged for:
+- Chrome Web Store
+- Firefox Add-ons
+
+## 🛟 Support
+
+For issues or feature requests, please:
+1. Check existing GitHub issues
+2. Submit detailed bug reports
+3. Include browser and extension version
+
+## 🔜 Future Improvements
+
+- Additional summarization options
+- More sharing capabilities
+- Enhanced content detection
+- Support for more browsers
+- Offline summarization capabilities
+
+## 🔗 Links
+
+- [Chrome Web Store](#)
+- [Firefox Add-ons](#)
+- [GitHub Repository](#)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.```
+
+
 ## ./manifest.chrome.json
 
 ```
@@ -57,84 +198,6 @@ This documentation was automatically generated.
         "extension_pages": "script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; default-src 'self'"
     }
 }```
-
-
-## ./README.md
-
-```
-# Page Summarizer Extension
-
-A Firefox extension that automatically generates and displays a summary at the top of web pages. The extension provides key takeaways and main points from the page content in a clean, user-friendly interface.
-
-## Features
-
-- 🚀 Automatic summary generation for all web pages (except homepages)
-- ✨ Clean, modern UI with loading states
-- 📋 One-click sharing functionality
-- 🎯 Key takeaways section
-- ❌ Easy-to-use close button
-- 🔄 Loading indicator while generating summary
-
-## How It Works
-
-The extension automatically runs on web pages and:
-
-1. Checks if the current page is not a homepage
-2. Shows a loading indicator while generating the summary
-3. Creates a summary panel containing:
-   - Article title
-   - Main summary paragraph
-   - Key takeaways list
-   - Share button
-
-The summary panel appears at the top of the page with a white background and subtle shadow for better readability.
-
-## Technical Implementation
-
-### Content Script (`content.js`)
-
-The main functionality is implemented through several key components:
-
-- `isArticlePage()`: Determines if the current page should be summarized
-- `yourSummarizationFunction()`: Generates the summary (currently returns mock data)
-- `createLoadingState()`: Creates the loading UI while generating summary
-- `summarizePage()`: Main function that orchestrates the summary generation and display
-- `createShareButton()`: Implements the sharing functionality with clipboard support
-
-### Permissions
-
-The extension requires:
-- `activeTab`: To access the current tab's content
-- `<all_urls>`: To run on any webpage
-
-## User Interface
-
-The extension provides:
-- A clean, modern interface with system fonts
-- Loading spinner with animation
-- Share button with copy-to-clipboard functionality
-- Animated notifications for successful copying
-- Close button to remove the summary
-
-## Sharing Features
-
-Users can share summaries via a dedicated share button that copies:
-- Main summary
-- Key takeaways
-- Current page URL
-- Attribution and link to extension
-
-## Development Notes
-
-To customize the extension:
-1. Replace `LOGO_URL_HERE` with your actual logo URL
-2. Replace `GITHUB_URL_HERE` with your repository URL
-3. Implement actual summarization logic in `yourSummarizationFunction()`
-4. Customize styling by modifying the CSS-in-JS styles
-
-## Browser Support
-
-Currently supports Firefox through Manifest V2.```
 
 
 ## ./build.sh
@@ -292,45 +355,6 @@ cd build/chrome && zip -r ../chrome-extension.zip ./* && cd ../..
     <script src="src/options.js"></script>
 </body>
 </html>```
-
-
-## ./generate-docs.sh
-
-```
-#!/bin/bash
-
-# Output file
-OUTPUT_FILE="README-AI.md"
-
-# Clear or create the output file
-echo "# Repository Documentation" > "$OUTPUT_FILE"
-echo -e "\nThis documentation was automatically generated.\n" >> "$OUTPUT_FILE"
-
-# Find all files recursively, excluding unnecessary files and images
-find . -type f \
-    ! -path "*/\.*" \
-    ! -name ".DS_Store" \
-    ! -path "*/node_modules/*" \
-    ! -path "*/__pycache__/*" \
-    ! -path "*/venv/*" \
-    ! -path "*/dist/*" \
-    ! -path "*/build/*" \
-    ! -name "README-AI.md" \
-    ! -name "*.jpg" \
-    ! -name "*.jpeg" \
-    ! -name "*.png" \
-    ! -name "*.gif" \
-    ! -name "*.svg" \
-    ! -name "*.ico" \
-    ! -name "*.webp" \
-    -print0 | while IFS= read -r -d $'\0' file; do
-    echo -e "\n## $file\n" >> "$OUTPUT_FILE"
-    echo -e "\`\`\`" >> "$OUTPUT_FILE"
-    cat "$file" >> "$OUTPUT_FILE"
-    echo -e "\`\`\`\n" >> "$OUTPUT_FILE"
-done
-
-echo "Documentation generated in $OUTPUT_FILE"```
 
 
 ## ./src/ui.js
