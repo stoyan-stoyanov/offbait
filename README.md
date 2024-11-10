@@ -30,7 +30,7 @@ Think of it as your personal BS filter for the internet. Not only will you save 
 4. Enable "Developer mode" in the top right
 5. Click "Load unpacked" and select the `build/chrome` directory
 6. Add your OpenAI API key in the extension settings page
-<img src="img/settings.png" alt="Settings Screenshot" width="70%">
+<img src="img/settings.png" alt="Settings Screenshot" width="100%">
 
 #### Firefox
 1. Clone the repository
