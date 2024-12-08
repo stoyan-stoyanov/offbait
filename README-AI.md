@@ -8,6 +8,8 @@ This documentation was automatically generated.
 ```
 # 🪝 Offbait
 
+<img src="img/img.png" alt="Page Summarizer Extension Screenshot" width="100%">
+
 > Tired of scrolling through 15 paragraphs just to find out you can actually microwave that leftover pizza? Yeah, we feel you.
 
 In today's internet, content creators often bury the good stuff under mountains of fluff, ads, and SEO keywords. Why? Because that's how they make money. But your time is worth more than that.
@@ -15,6 +17,43 @@ In today's internet, content creators often bury the good stuff under mountains 
 This extension fights back against clickbait and content bloat. It uses AI to instantly extract what you actually want to know - the key points, the real answer, the important stuff. Whether it's a recipe buried under someone's life story or a product review hidden in affiliate links, we'll get you straight to the point.
 
 Think of it as your personal BS filter for the internet. Not only will you save time, but maybe, just maybe, we'll help push the internet back towards what matters: quality content that respects your time.
+
+## 🏃‍♂️ Quick Start
+
+### Local Installation
+
+#### Chrome
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/yourusername/page-summarizer.git
+   cd page-summarizer
+   ```
+
+2. Build the extension:
+   ```bash
+   ./build.sh
+   ```
+
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable "Developer mode" in the top right
+5. Click "Load unpacked" and select the `build/chrome` directory
+6. Add your OpenAI API key in the extension settings page
+<img src="img/settings.png" alt="Settings Screenshot" width="100%">
+
+#### Firefox
+1. Clone the repository
+2. Open Firefox and go to `about:debugging`
+3. Click "This Firefox" in the left sidebar
+4. Click "Load Temporary Add-on"
+5. Select `manifest.json` in the project root
+
+### Development
+1. Make sure you have your OpenAI API key ready
+2. Install the extension using the steps above
+3. Open the extension settings and enter your API key
+4. To see your changes:
+   - Chrome: build using `./build.sh` and click the refresh button on the extension card
+   - Firefox: Reload the extension from `about:debugging`
 
 ## ✨ Features
 
@@ -149,9 +188,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ```
 {
     "manifest_version": 3,
-    "name": "Page Summarizer",
+    "name": "Offbait",
     "version": "1.0",
-    "description": "Automatically adds a summary at the top of web pages",
+    "description": "Personal BS filter for the internet",
     "permissions": [
         "activeTab",
         "scripting",
@@ -195,8 +234,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
         "service_worker": "src/background.chrome.js"
     },
     "content_security_policy": {
-        "extension_pages": "script-src 'self'; style-src 'self' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; default-src 'self'"
-    }
+        "extension_pages": "script-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com data:; default-src 'self' https://cdnjs.cloudflare.com"
+    },
+    "web_accessible_resources": [{
+        "resources": ["src/*"],
+        "matches": ["<all_urls>"]
+    }]
 }```
 
 
@@ -235,9 +278,9 @@ cd build/chrome && zip -r ../chrome-extension.zip ./* && cd ../..
 ```
 {
     "manifest_version": 2,
-    "name": "Page Summarizer",
+    "name": "Offbait",
     "version": "1.0",
-    "description": "Automatically adds a summary at the top of web pages",
+    "description": "Personal BS filter for the internet",
     "permissions": [
         "activeTab",
         "<all_urls>",
@@ -361,12 +404,23 @@ cd build/chrome && zip -r ../chrome-extension.zip ./* && cd ../..
 
 ```
 //ui.js
+function ensureFontAwesome() {
+    if (!document.querySelector('link[href*="font-awesome"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
+        link.crossOrigin = 'anonymous';
+        link.referrerPolicy = 'no-referrer';
+        document.head.appendChild(link);
+    }
+}
 
 function createLoadingState() {
+    ensureFontAwesome();
     const loadingDiv = document.createElement('div');
     loadingDiv.id = 'page-summary-loading';
     loadingDiv.className = 'ob-body';
-    
+
     const spinner = document.createElement('div');
     spinner.style.cssText = `
         width: 20px;
@@ -376,27 +430,28 @@ function createLoadingState() {
         border-radius: 50%;
         animation: spin 1s linear infinite;
     `;
-    
+
     const loadingText = document.createElement('span');
     loadingText.textContent = 'Generating page summary...';
-    
+
     loadingDiv.appendChild(spinner);
     loadingDiv.appendChild(loadingText);
-    
+
     return loadingDiv;
 }
 
 async function createShareButton(summaryData) {
+    ensureFontAwesome();
     const button = document.createElement('button');
     button.className = 'share-button';
     button.innerHTML = `
         <i class="fas fa-share-alt" style="font-size: 16px;"></i>
         Share Summary
     `;
-    
+
     button.onclick = async () => {
-        const shareText = `📝 Summary:\n${summaryData.summary}\n\n🎯 Key Takeaways:\n${summaryData.keyTakeaways.map(point => `• ${point}`).join('\n')}\n\n🔗 ${window.location.href}\n\n✨ Generated by OffBait\nGet the extension: https://unwaste.io/install`;
-        
+        const shareText = `📝 Summary:\n${summaryData.summary}\n\n🎯 Key Takeaways:\n${summaryData.keyTakeaways.map(point => `• ${point}`).join('\n')}\n\n🔗 ${window.location.href}\n\n✨ Generated by Offbait\nGet the extension: https://offbait.io/install`;
+
         try {
             await navigator.clipboard.writeText(shareText);
             showCopiedMessage();
@@ -404,29 +459,30 @@ async function createShareButton(summaryData) {
             console.error('Failed to copy:', err);
         }
     };
-    
+
     return button;
 }
 
 function createSummaryUI(summaryData) {
+    ensureFontAwesome();
     const summaryDiv = document.createElement('div');
     summaryDiv.id = 'page-summary-extension';
     summaryDiv.className = 'ob-body';
-    
+
     // Create header
     const header = createHeader();
-    
+
     // Create close button
     const closeButton = createCloseButton(() => summaryDiv.remove());
-    
+
     // Create content elements
     const content = createContent(summaryData);
-    
+
     // Assemble everything
     summaryDiv.appendChild(closeButton);
     summaryDiv.appendChild(header);
     Object.values(content).forEach(element => summaryDiv.appendChild(element));
-    
+
     return summaryDiv;
 }
 
@@ -440,7 +496,7 @@ function createHeader() {
         padding-bottom: 15px;
         border-bottom: 1px solid #eee;
     `;
-    
+
     const logoText = document.createElement('div');
     logoText.textContent = '🪝 offbait';
     logoText.style.cssText = `
@@ -450,30 +506,16 @@ function createHeader() {
         align-items: center;
         gap: 5px;
     `;
-    
+
     const rightSection = document.createElement('div');
     rightSection.style.cssText = `
         display: flex;
         align-items: center;
         gap: 15px;
     `;
-    
-    const settingsButton = document.createElement('button');
-    settingsButton.innerHTML = '<i class="fas fa-cog"></i>';
-    settingsButton.style.cssText = `
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #666;
-        padding: 5px;
-    `;
-    settingsButton.title = "Open Settings";
-    settingsButton.onclick = () => {
-        browser.runtime.openOptionsPage();
-    };
-    
+
     const githubLink = document.createElement('a');
-    githubLink.href = 'GITHUB_URL_HERE';
+    githubLink.href = 'https://github.com/stoyan-stoyanov/offbait';
     githubLink.style.cssText = `
         color: #333;
         text-decoration: none;
@@ -482,18 +524,19 @@ function createHeader() {
         gap: 5px;
         font-size: 14px;
     `;
+
     githubLink.innerHTML = `
         <i class="fab fa-github" style="font-size: 20px;"></i>
         GitHub
     `;
     githubLink.target = '_blank';
-    
-    rightSection.appendChild(settingsButton);
+
+
     rightSection.appendChild(githubLink);
-    
+
     header.appendChild(logoText);
     header.appendChild(rightSection);
-    
+
     return header;
 }
 
@@ -517,7 +560,7 @@ function createCloseButton(onClose) {
 
 function createContent(summaryData) {
     const elements = {};
-    
+
     // Article Title
     elements.title = document.createElement('h1');
     elements.title.textContent = summaryData.title;
@@ -527,7 +570,7 @@ function createContent(summaryData) {
         color: #2c3e50;
         font-weight: 600;
     `;
-    
+
     // Summary Section
     elements.summaryTitle = document.createElement('h2');
     elements.summaryTitle.textContent = '✨ Summary';
@@ -536,7 +579,7 @@ function createContent(summaryData) {
         font-size: 1.4em;
         color: #2c3e50;
     `;
-    
+
     elements.summaryText = document.createElement('p');
     elements.summaryText.textContent = summaryData.summary;
     elements.summaryText.style.cssText = `
@@ -544,7 +587,7 @@ function createContent(summaryData) {
         line-height: 1.5;
         color: #34495e;
     `;
-    
+
     // Key Takeaways
     elements.takeawaysTitle = document.createElement('h3');
     elements.takeawaysTitle.textContent = '🎯 Key Takeaways';
@@ -553,7 +596,7 @@ function createContent(summaryData) {
         font-size: 1.2em;
         color: #2c3e50;
     `;
-    
+
     elements.takeawaysList = document.createElement('ul');
     elements.takeawaysList.style.cssText = `
         margin: 0 0 20px 0;
@@ -562,21 +605,18 @@ function createContent(summaryData) {
         color: #34495e;
         list-style: disc;
     `;
-    
+
     summaryData.keyTakeaways.forEach(takeaway => {
         const li = document.createElement('li');
         li.textContent = takeaway;
         li.style.marginBottom = '5px';
         elements.takeawaysList.appendChild(li);
     });
-    
+
     return elements;
 }
 
-// Helper function for showing copied message (not included in original code)
 function showCopiedMessage() {
-    // You can implement this function to show a notification when content is copied
-    // For example:
     const notification = document.createElement('div');
     notification.textContent = 'Copied to clipboard!';
     notification.style.cssText = `
@@ -1323,7 +1363,7 @@ async function callOpenAI(content) {
             messages: [
                 {
                     role: "system",
-                    content: "You are the biggest leading expert at summarizing content from HTML. Extract a summary, and key takeaways from the provided HTML. If the title is a catchy question, make sure to answer the question directly and immediately. Focus only on the important informative stuff and be concise and clear. The summary shouldn't be longer than 3 sentences, and there should be max of 3-5 bullet points. Please give me the best info possible. Also, make sure to extract the highlights depending on the type of the content. For example, if the content is a cooking blog or a recipe please summarize the ingredients and detailed recipe steps in the key takeaways, if the content is from a product page extract key product information. If you do well I will give you a massive tip of $1000 dollars!"
+                    content: "You are the biggest leading expert at summarizing content from HTML. Extract a summary, and key takeaways from the provided HTML. If the title is a catchy question, make sure to answer the question directly and immediately. Focus only on the important informative stuff and be concise and clear. The summary shouldn't be longer than 3 sentences, and there should be max of 3-5 bullet points. Please give me the best info possible. Also, make sure to extract the highlights depending on the type of the content. For example, if the content is a cooking blog or a recipe please focus on summarizing the ingreadients and the overal cooking plan in the summary section and list all recipe steps in the key takeaways, if the content is from a product page extract key product information. If you do well I will give you a massive tip of $1000 dollars!"
                 },
                 {
                     role: "user",
