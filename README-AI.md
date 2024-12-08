@@ -416,34 +416,41 @@ function ensureFontAwesome() {
 }
 
 function createLoadingState() {
-    ensureFontAwesome();
-    const loadingDiv = document.createElement('div');
-    loadingDiv.id = 'page-summary-loading';
-    loadingDiv.className = 'ob-body';
-
+    const container = document.createElement('div');
+    container.id = 'page-summary-loading';
+    
+    const shadow = container.attachShadow({ mode: 'open' });
+    
+    const fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
+    
+    const styles = document.createElement('link');
+    styles.rel = 'stylesheet';
+    styles.href = chrome.runtime.getURL('src/styles.css');
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ob-body';  // Updated class name
+    
     const spinner = document.createElement('div');
-    spinner.style.cssText = `
-        width: 20px;
-        height: 20px;
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #3498db;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    `;
-
+    spinner.className = 'ob-spinner';  // Updated class name
+    
     const loadingText = document.createElement('span');
     loadingText.textContent = 'Generating page summary...';
-
-    loadingDiv.appendChild(spinner);
-    loadingDiv.appendChild(loadingText);
-
-    return loadingDiv;
+    
+    wrapper.appendChild(spinner);
+    wrapper.appendChild(loadingText);
+    
+    shadow.appendChild(fontAwesome);
+    shadow.appendChild(styles);
+    shadow.appendChild(wrapper);
+    
+    return container;
 }
 
-async function createShareButton(summaryData) {
-    ensureFontAwesome();
+function createShareButton(summaryData) {
     const button = document.createElement('button');
-    button.className = 'share-button';
+    button.className = 'ob-share-button';  // Updated from 'share-button' to 'ob-share-button'
     button.innerHTML = `
         <i class="fas fa-share-alt" style="font-size: 16px;"></i>
         Share Summary
@@ -464,26 +471,47 @@ async function createShareButton(summaryData) {
 }
 
 function createSummaryUI(summaryData) {
-    ensureFontAwesome();
-    const summaryDiv = document.createElement('div');
-    summaryDiv.id = 'page-summary-extension';
-    summaryDiv.className = 'ob-body';
-
+    const container = document.createElement('div');
+    container.id = 'page-summary-extension';
+    
+    const shadow = container.attachShadow({ mode: 'open' });
+    
+    // Add Font Awesome
+    const fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css';
+    
+    // Add your existing styles
+    const styles = document.createElement('link');
+    styles.rel = 'stylesheet';
+    styles.href = browser.runtime.getURL('src/styles.css');
+    
+    const wrapper = document.createElement('div');
+    wrapper.className = 'ob-body';
+    
     // Create header
     const header = createHeader();
-
+    
     // Create close button
-    const closeButton = createCloseButton(() => summaryDiv.remove());
-
+    const closeButton = createCloseButton(() => container.remove());
+    
     // Create content elements
     const content = createContent(summaryData);
-
+    
+    // Create share button
+    const shareButton = createShareButton(summaryData);
+    
     // Assemble everything
-    summaryDiv.appendChild(closeButton);
-    summaryDiv.appendChild(header);
-    Object.values(content).forEach(element => summaryDiv.appendChild(element));
-
-    return summaryDiv;
+    wrapper.appendChild(closeButton);
+    wrapper.appendChild(header);
+    Object.values(content).forEach(element => wrapper.appendChild(element));
+    wrapper.appendChild(shareButton); // Make sure to append the share button
+    
+    shadow.appendChild(fontAwesome);
+    shadow.appendChild(styles);
+    shadow.appendChild(wrapper);
+    
+    return container;
 }
 
 function createHeader() {
@@ -687,13 +715,13 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
 
 /* Loading Animation */
-@keyframes spin {
+@keyframes ob-spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
 /* Share Button */
-.share-button {
+.ob-share-button {
     background-color: #3498db;
     color: white;
     border: none;
@@ -707,12 +735,12 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     transition: background-color 0.2s;
 }
 
-.share-button:hover {
+.ob-share-button:hover {
     background-color: #2980b9;
 }
 
 /* Copy Message */
-.copied-message {
+.ob-copied-message {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -720,16 +748,16 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     color: white;
     padding: 12px 24px;
     border-radius: 4px;
-    animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
+    animation: ob-fadeIn 0.3s, ob-fadeOut 0.3s 1.7s;
     z-index: 10000;
 }
 
-@keyframes fadeIn {
+@keyframes ob-fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeOut {
+@keyframes ob-fadeOut {
     from { opacity: 1; transform: translateY(0); }
     to { opacity: 0; transform: translateY(10px); }
 }
@@ -755,20 +783,17 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     gap: 10px;
 }
 
-
 /* Options menu styles */
-
-* {
+.ob-container * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-ob-body {
+.ob-body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     line-height: 1.5;
     color: #334155;
-    background-color: red;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -995,49 +1020,28 @@ ob-body {
     }
 }
 
-/* deprecated floating button
+/* Spinner specific styles */
+.ob-spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    animation: ob-spin 1s linear infinite;
+}
 
-#summary-activate-button {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 10000;
-    background-color: #f4f4f4;
-    color: white;
+/* Close button styles */
+.ob-close-button {
+    position: absolute;
+    right: 20px;
+    top: 20px;
     border: none;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
+    background: none;
     cursor: pointer;
-    font-size: 1.2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-}
-
-#summary-activate-button:hover {
-    background-color: #b1c7d5;
-    transform: scale(1.05);
-    transition: transform 0.2s;
-}
-
-#summary-activate-button:disabled {
-    background-color: #95a5a6;
-    cursor: not-allowed;
-}
-
-#summary-activate-button .spinner {
-    width: 1.2rem;
-    height: 1.2rem;
-    border: 2px solid #fff;
-    border-top: 2px solid transparent;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-*/```
+    font-size: 16px;
+    color: #7f8c8d;
+    padding: 5px;
+}```
 
 
 ## ./src/background.js

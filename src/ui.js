@@ -43,10 +43,9 @@ function createLoadingState() {
     return container;
 }
 
-async function createShareButton(summaryData) {
-    ensureFontAwesome();
+function createShareButton(summaryData) {
     const button = document.createElement('button');
-    button.className = 'share-button';
+    button.className = 'ob-share-button';  // Updated from 'share-button' to 'ob-share-button'
     button.innerHTML = `
         <i class="fas fa-share-alt" style="font-size: 16px;"></i>
         Share Summary
@@ -70,7 +69,6 @@ function createSummaryUI(summaryData) {
     const container = document.createElement('div');
     container.id = 'page-summary-extension';
     
-    // Create shadow DOM
     const shadow = container.attachShadow({ mode: 'open' });
     
     // Add Font Awesome
@@ -83,7 +81,6 @@ function createSummaryUI(summaryData) {
     styles.rel = 'stylesheet';
     styles.href = browser.runtime.getURL('src/styles.css');
     
-    // Create content wrapper
     const wrapper = document.createElement('div');
     wrapper.className = 'ob-body';
     
@@ -96,10 +93,14 @@ function createSummaryUI(summaryData) {
     // Create content elements
     const content = createContent(summaryData);
     
+    // Create share button
+    const shareButton = createShareButton(summaryData);
+    
     // Assemble everything
     wrapper.appendChild(closeButton);
     wrapper.appendChild(header);
     Object.values(content).forEach(element => wrapper.appendChild(element));
+    wrapper.appendChild(shareButton); // Make sure to append the share button
     
     shadow.appendChild(fontAwesome);
     shadow.appendChild(styles);
